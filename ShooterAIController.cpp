@@ -1,5 +1,6 @@
 #include "ShooterAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 
 void AShooterAIController::BeginPlay()
@@ -8,36 +9,35 @@ void AShooterAIController::BeginPlay()
 
 	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
+	if (AIBehavior) {
+		RunBehaviorTree(AIBehavior);
+		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+	}
+
 }
 
 void AShooterAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (LineOfSightTo(PlayerPawn)) {
-		SetFocus(PlayerPawn);
-		MoveToActor(PlayerPawn, AcceptanceRadius);	
+	 if (LineOfSightTo(PlayerPawn)) {
+		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
 	}else {
-		ClearFocus(EAIFocusPriority::Gameplay);
-		StopMovement();
+		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
 	}
 
-	// if (PlayerPawn) {
-
-	// 	FVector Location;
-	// 	FRotator Rotation;
-	
-	// 	GetPlayerViewPoint(Location, Rotation);
-
-	// 	float Distance = FVector::Dist(Location, PlayerPawn->GetActorLocation());
-
-	// 	UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Distance);
-
-	// 	if (Distance <= FocusDistance) {
-	// 		SetFocus(PlayerPawn);
-	// 	}else {
-	// 		ClearFocus(EAIFocusPriority::Gameplay);
-	// 	}
-
+	// Replaced by Behavior Tree
+	// if (LineOfSightTo(PlayerPawn)) {
+	// 	SetFocus(PlayerPawn);
+	// 	MoveToActor(PlayerPawn, AcceptanceRadius);	
+	// }else {
+	// 	ClearFocus(EAIFocusPriority::Gameplay);
+	// 	StopMovement();
 	// }
+
+	if (AIBehavior) {
+		RunBehaviorTree(AIBehavior);
+	}
+
 }

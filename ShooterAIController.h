@@ -29,7 +29,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float FocusDistance = 500;
 
+	// Replaced by Behavior Tree
+	// UPROPERTY(EditAnywhere)
+	// float AcceptanceRadius = 300;
+
 	UPROPERTY(EditAnywhere)
-	float AcceptanceRadius = 300;
+	class UBehaviorTree* AIBehavior;
 
 };
