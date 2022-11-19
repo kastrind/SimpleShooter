@@ -27,13 +27,6 @@ private:
 	class APawn* PlayerPawn;
 
 	UPROPERTY(EditAnywhere)
-	float FocusDistance = 500;
-
-	// Replaced by Behavior Tree
-	// UPROPERTY(EditAnywhere)
-	// float AcceptanceRadius = 300;
-
-	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* AIBehavior;
 
 };

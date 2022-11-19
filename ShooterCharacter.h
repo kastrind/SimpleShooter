@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	void Fire();
+
 private:
 
 	void MoveForward(float AxisValue);
@@ -60,5 +62,4 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGun> GunClass;
 
-	void Fire();
 };
